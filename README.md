@@ -1,2 +1,4 @@
-# kuckjwi-kotlin-study
-코틀린을 공부해 보아요~
+### Purpose
+Kotlin을 연습해 보아요~
+
+[kotlin](https://kotlinlang.org/)
