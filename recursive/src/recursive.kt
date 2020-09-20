@@ -7,8 +7,10 @@ fun String.tail() = drop(1)
 fun main() {
     println(sum(5))
     println(power(2, 10))
-    println(factorial(5))
+    println(powerFP(2, 10))
+    println(factorial(8))
     println(max(listOf(1, 3, 100, 8, 4)))
+    println(maxFP(listOf(1, 3, 100, 8, 4)))
     println(reverse("kuckjwi"))
     println(toBinary(10))
     println(replicate(3, 5))
@@ -18,6 +20,9 @@ fun main() {
     println(zip(listOf(1, 3, 5), listOf(2, 4)))
     println(quicksort(listOf(5, 100, 200, 1, 4, 3)))
     println(gcd(1112, 695))
+    println(fiboRecursion(6))
+    println(fiboMemoization(6))
+    println(fiboFP(6))
 }
 
 fun sum(n: Int): Int = when {
@@ -27,12 +32,16 @@ fun sum(n: Int): Int = when {
 
 fun power(x: Int, n: Int): Int = when {
     n < 1 -> 1
-    else -> x * power(x, n - 1)
+    else -> {
+        x * power(x, n - 1)
+    }
 }
 
 fun factorial(n: Int): Int = when {
     n < 1 -> 1
-    else -> n * factorial(n - 1)
+    else -> {
+        n * factorial(n - 1)
+    }
 }
 
 fun max(list: List<Int>): Int = when {
@@ -43,6 +52,16 @@ fun max(list: List<Int>): Int = when {
         val tail = list.tail()
         val maxVal = max(tail)
         if (head > maxVal) head else maxVal
+    }
+}
+
+tailrec fun maxFP(list: List<Int>, acc: Int = Int.MIN_VALUE): Int = when {
+    list.isEmpty() -> 0
+    1 == list.size -> acc
+    else -> {
+        val head = list.head()
+        val maxVal = if (head > acc) head else acc
+        maxFP(list.tail(), maxVal)
     }
 }
 
@@ -93,4 +112,42 @@ fun quicksort(list: List<Int>): List<Int> = when {
 fun gcd(m: Int, n: Int): Int = when (n) {
     0 -> m
     else -> gcd(n, m % n)
+}
+
+fun fiboRecursion(n: Int): Int {
+    return when (n) {
+        0 -> 0
+        1 -> 1
+        else -> fiboRecursion(n - 2) + fiboRecursion(n - 1)
+    }
+}
+
+var memo = Array(100) { -1 }
+
+fun fiboMemoization(n: Int): Int =
+    when {
+        n == 0 -> 0
+        n == 1 -> 1
+        memo[n] != -1 -> memo[n]
+        else -> {
+            memo[n] = fiboMemoization(n - 2) + fiboMemoization(n - 1)
+            memo[n]
+        }
+    }
+
+fun fiboFP(n: Int): Int = fiboFP(n, 0, 1)
+
+tailrec fun fiboFP(n: Int, first: Int, second: Int): Int = when(n) {
+    0 -> first
+    1 -> second
+    else -> fiboFP(n - 1, second, first + second)
+}
+
+fun powerFP(x: Int, n: Int): Int = powerFP(n - 1, x, x)
+
+tailrec fun powerFP(n: Int, first: Int, second: Int): Int = when(n) {
+    0 -> second
+    else -> {
+        powerFP(n - 1, first, first * second)
+    }
 }
